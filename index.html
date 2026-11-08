@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Countries API</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body class="bg-light">
+
+    <div class="container py-5">
+        <h2 class="text-center fw-bold mb-4">World Countries API</h2>
+        <div class="row g-4" id="countries1"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const api = "https://countries.dev/countries";
+        const countries1 = document.getElementById("countries1");
+        async function country() {
+            const response = await fetch(api);
+            const countries = await response.json();
+            countries1.innerHTML = countries.map(country => {
+                const name = country.name;
+                const capital = country.capital;
+                const population = Number(country.population).toLocaleString();
+                const flag = country.flags.svg;
+                const region = country.region;
+                const languages = country.languages.map(
+                    language => `<span class="badge bg-primary-subtle text-primary m-1">${language.name}</span>`
+                ).join(" ")
+                    
+                return `
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                        <div class="card shadow-sm rounded-4 h-100 overflow-hidden border border-success">
+                            <img src="${flag}" class="w-100 object-fit-cover" height="160" alt="${name} flag">
+                            <div class="card-body">
+                                <h5 class="fw-bold mb-3">${name}</h5>
+                                <div class="d-flex justify-content-between border-top py-2 small">
+                                    <span>Capital</span>
+                                    <strong>${capital}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between border-top py-2 small">
+                                    <span>Population</span>
+                                    <strong>${population}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between border-top py-2 small">
+                                    <span>Region</span>
+                                    <strong>${region}</strong>
+                                </div>
+                                <div class="border-top pt-3 mt-2">
+                                    <h6 class="text-secondary fw-bold small">Languages</h6>
+                                    ${languages}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+        country();
+    </script>
+</body>
+
+</html>
